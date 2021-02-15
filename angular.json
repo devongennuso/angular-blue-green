@@ -1,0 +1,150 @@
+{
+  "version": 1,
+  "cli": {
+    "defaultCollection": "@nrwl/angular"
+  },
+  "schematics": {
+    "@nrwl/angular": {
+      "application": {
+        "linter": "eslint"
+      },
+      "library": {
+        "linter": "eslint"
+      },
+      "storybook-configuration": {
+        "linter": "eslint"
+      }
+    },
+    "@nrwl/angular:application": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "jest"
+    },
+    "@nrwl/angular:component": {
+      "style": "scss"
+    }
+  },
+  "defaultProject": "blue-green",
+  "projects": {
+    "blue-green": {
+      "projectType": "application",
+      "root": "apps/blue-green",
+      "sourceRoot": "apps/blue-green/src",
+      "prefix": "aws-workspace",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/blue-green",
+            "index": "apps/blue-green/src/index.html",
+            "main": "apps/blue-green/src/main.ts",
+            "polyfills": "apps/blue-green/src/polyfills.ts",
+            "tsConfig": "apps/blue-green/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "apps/blue-green/src/favicon.ico",
+              "apps/blue-green/src/assets"
+            ],
+            "styles": ["apps/blue-green/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/blue-green/src/environments/environment.ts",
+                  "with": "apps/blue-green/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "blue-green:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "blue-green:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "blue-green:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/blue-green/src/**/*.ts",
+              "apps/blue-green/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/blue-green"],
+          "options": {
+            "jestConfig": "apps/blue-green/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "blue-green-e2e": {
+      "root": "apps/blue-green-e2e",
+      "sourceRoot": "apps/blue-green-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/blue-green-e2e/cypress.json",
+            "tsConfig": "apps/blue-green-e2e/tsconfig.e2e.json",
+            "devServerTarget": "blue-green:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "blue-green:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/blue-green-e2e/**/*.{js,ts}"]
+          }
+        }
+      }
+    }
+  }
+}
