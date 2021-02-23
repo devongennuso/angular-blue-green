@@ -17,6 +17,7 @@
   },
   "projects": {
     "blue-green": { "tags": [] },
-    "blue-green-e2e": { "tags": [], "implicitDependencies": ["blue-green"] }
+    "blue-green-e2e": { "tags": [], "implicitDependencies": ["blue-green"] },
+    "ui": { "tags": [] }
   }
 }
